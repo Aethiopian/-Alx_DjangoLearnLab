@@ -20,14 +20,42 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4wpq8&p$_*+kufa!l(jnjxiwj2o3ofp#l)w4!+sbfyy3f6i-w='
+SECRET_KEY = 'django-insecure-f(d0bb5(g49n_gkjal2+6m4et=rexm3d^#-)mce#*kvki@x+ac'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
 
-AUTH_USER_MODEL = "bookshelf.CustomUser"
+ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com']
+
+
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = ("'self'", 'https://trusted-scripts.example.com')
+CSP_STYLE_SRC = ("'self'", 'https://trusted-styles.example.com')
+
+
+# Redirect all HTTP traffic to HTTPS
+SECURE_SSL_REDIRECT = True
+
+# HTTP Strict Transport Security (HSTS)
+SECURE_HSTS_SECONDS = 31536000  # Enforce HTTPS for 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to all subdomains
+SECURE_HSTS_PRELOAD = True  # Allow the domain to be preloaded in browsers
+
+# Enforce secure cookies
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+# Prevent XSS by enabling browser's XSS protection
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent content sniffing
+
+# Secure Proxy SSL Header
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
+
 
 # Application definition
 
@@ -38,8 +66,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bookshelf',
-    'relationship_app',
+    'bookshelf.apps.BookshelfConfig',
+    'relationship_app.apps.RelationshipAppConfig',
+    'csp'
 ]
 
 MIDDLEWARE = [
@@ -71,6 +100,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'LibraryProject.wsgi.application'
+
+AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
 
 # Database
